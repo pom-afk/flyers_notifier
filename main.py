@@ -1,6 +1,6 @@
 from datetime import datetime, timezone, timedelta
 from nhl import get_todays_game, get_game_state
-from notify import notify
+from flyers_notify import notify
 import time
 import os
 

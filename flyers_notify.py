@@ -1,5 +1,5 @@
 import os
-from notify import Client
+from ntfy import Client
 
 TOPIC = os.environ.get("NTFY_TOPIC", "flyers-notifier")
 
