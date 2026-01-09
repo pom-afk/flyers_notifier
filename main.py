@@ -1,10 +1,14 @@
 from datetime import datetime, timezone, timedelta
-from config import TEAM_ID, PRE_GAME_MINUTES
 from nhl import get_todays_game, get_game_state
 from notify import notify
 import time
+import os
+
+TEAM_ID = int(os.environ.get("TEAM_ID", 4))
+PRE_GAME_MINUTES = 30
 
 def main():
+    notify("Flyers notifier started 🚨")
     game = get_todays_game(TEAM_ID)
     if not game:
         return
@@ -18,12 +22,12 @@ def main():
     while True:
         now = datetime.now(timezone.utc)
 
-        # Pre-game alert
+        # Notify 30 min before game
         if not pregame_sent and now >= start - timedelta(minutes=PRE_GAME_MINUTES):
-            notify(f"Flyers game starts in {PRE_GAME_MINUTES} minutes 🏒")
+            notify("Flyers game starts in 30 minutes 🏒")
             pregame_sent = True
 
-        # Intermission / next period alert
+        # Check game state
         state = get_game_state(game_pk)
         if state["next_start"]:
             warn_time = state["next_start"] - timedelta(seconds=60)
@@ -33,7 +37,6 @@ def main():
         else:
             warned_next = False
 
-        # Always sleep
         time.sleep(30)
 
 if __name__ == "__main__":

@@ -1,9 +1,9 @@
-import requests
-from config import NTFY_TOPIC
+import os
+from notify import Client
 
-def notify(msg):
-    requests.post(
-        f"https://ntfy.sh/{NTFY_TOPIC}",
-        data=msg.encode("utf-8"),
-        timeout=5
-    )
+TOPIC = os.environ.get("NTFY_TOPIC", "flyers-notifier")
+
+client = Client(topic=TOPIC)
+
+def notify(message):
+    client.publish(message)
